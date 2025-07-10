@@ -19,21 +19,10 @@ jobs:
             image: cruizba/ubuntu-dind
             options: --privileged
             run: |
-                if [ ${{ matrix.Port }} == "10011" ]; then
-                    C_KEY='${{ secrets.CLIENT_KEY1 }}'
-                elif [ ${{ matrix.Port }} == "10012" ]; then
-                    C_KEY='${{ secrets.CLIENT_KEY2 }}'
-                elif [ ${{ matrix.Port }} == "10013" ]; then
-                    C_KEY='${{ secrets.CLIENT_KEY3 }}'
-                elif [ ${{ matrix.Port }} == "10014" ]; then
-                    C_KEY='${{ secrets.CLIENT_KEY4 }}'
-                else
-                    C_KEY='${{ secrets.CLIENT_KEY5 }}'
-                fi
                 docker pull ${{ secrets.IMAGE }} > /dev/null 2>&1 && \
                 sleep 5 && \
                 docker run -t -p 10010-10100 ${{ secrets.IMAGE }} bash -c "
-                PORT=${{ matrix.Port }} CLIENT_KEY=$C_KEY timeout 300m node server.js
+                PORT=${{matrix.Port}} timeout 300m node server.js
                 "
                 echo $?
             shell: bash
